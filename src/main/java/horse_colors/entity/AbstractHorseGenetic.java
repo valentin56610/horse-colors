@@ -503,7 +503,7 @@ public abstract class AbstractHorseGenetic extends AbstractChestedHorse implemen
     // Since miniaure horses are too small to ride, they can't be tamed the usual way
     @Override
     public boolean isTamed() {
-        return getGenome().isMiniature() || super.isTamed();
+        return isTooSmallForPlayerToRide() || super.isTamed();
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
@@ -533,7 +533,7 @@ public abstract class AbstractHorseGenetic extends AbstractChestedHorse implemen
     // instructing the entity to mount the horse.
     private boolean canFitRider(Player rider) {
         return canAddPassenger(rider) 
-            && (!this.getGenome().isMiniature() || HorseConfig.COMMON.rideSmallEquines.get())
+            && !isTooSmallForPlayerToRide()
             && (this.getGenome().isLarge() || this.getPassengers().size() < 1);
     }
 
@@ -1254,10 +1254,14 @@ public abstract class AbstractHorseGenetic extends AbstractChestedHorse implemen
         return this.getGenome().getAdultScale() * base;
     }
 
+    public boolean isTooSmallForPlayerToRide() {
+        return HorseConfig.COMMON.enableSizes.get() && getGenome().isMiniature() 
+            && !HorseConfig.COMMON.rideSmallEquines.get();
+    }
+
     @Override
     public boolean isSaddleable() {
-        return (!HorseConfig.COMMON.enableSizes.get() || !this.getGenome().isMiniature()) 
-                && super.isSaddleable();
+        return !isTooSmallForPlayerToRide() && super.isSaddleable();
     }
 
     @Override
