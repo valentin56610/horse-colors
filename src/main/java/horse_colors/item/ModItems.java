@@ -10,6 +10,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.core.BlockPos;
+import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
@@ -29,6 +30,12 @@ public class ModItems {
     );
     public static final RegistryObject<GenderChangeItem> genderChangeItem = ITEM_DEFERRED.register("gender_change_item",
         () -> new GenderChangeItem((new Item.Properties()).stacksTo(64).tab(CreativeTab.instance))
+    );
+    public static final RegistryObject<FertilityPotion> fertilityPotion = ITEM_DEFERRED.register("fertility_potion",
+        () -> new FertilityPotion((new Item.Properties()).stacksTo(64).tab(CreativeTab.instance), true)
+    );
+    public static final RegistryObject<FertilityPotion> infertilityPotion = ITEM_DEFERRED.register("infertility_potion",
+        () -> new FertilityPotion((new Item.Properties()).stacksTo(64).tab(CreativeTab.instance), false)
     );
     public static final RegistryObject<CompatibleHorseArmor> netheriteHorseArmor = ITEM_DEFERRED.register("netherite_horse_armor", 
         () -> new CompatibleHorseArmor(13, "netherite", (new Item.Properties()).stacksTo(1).tab(CreativeTab.instance).fireResistant())
@@ -56,5 +63,9 @@ public class ModItems {
             }
         };
         DispenserBlock.registerBehavior(netheriteHorseArmor.get(), dispenseHorseArmor);
+    }
+
+    public static void registerPotionRecipes() {
+        BrewingRecipeRegistry.addRecipe(new InfertilityPotionBrewingRecipe());
     }
 }
